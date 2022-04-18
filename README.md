@@ -10,6 +10,6 @@ E possivel visualizar o arquivo na aba "Routes", ela possui um botão que é pos
 <br>
 <br>
 Falta<br>
-Poder alterar times(adicionar pessoas ou remover) depois que o time ja foi feito.<br>
+Poder alterar times.<br>
 Poder selecionar opcoes para impressao e selecionar os times para o servico<br>
 Finalizar a parte de upload do arquivo<br>
