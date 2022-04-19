@@ -9,8 +9,7 @@ namespace RouteSystemMVC.Models
         [Display(Name = "Nome")]
         public string Name { get; set; }
         [Display(Name = "Estado")]
-        public string State { get; set; }
-    
+        public string State { get; set; }  
              
     
     

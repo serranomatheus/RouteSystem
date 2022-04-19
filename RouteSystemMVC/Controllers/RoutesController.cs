@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,16 +15,24 @@ namespace RouteSystemMVC.Controllers
     public class RoutesController : Controller
     {
         private readonly RouteSystemMVCContext _context;
-
+        
         public RoutesController(RouteSystemMVCContext context)
         {
             _context = context;
         }
 
         //GET: Routes
-        public async Task<IActionResult> Index()
+        [HttpPost]
+        public async Task<IActionResult> Index(IFormFile pathFile)
         {
-             return View(ReaderFile.ReadFile(@"C:\Users\matheus\Downloads\Rotas.xlsx"));
+           
+            var routes = ReaderFile.ReadFile(pathFile);
+            string[] nameColum = new string[routes.GetLength(1)];
+            for(int i=0; i<routes.GetLength(1); i++)
+            {
+                nameColum[i] = routes[0, i];
+            }
+            return View(nameColum);
         }
 
        //GET: Routes/Details/5
@@ -66,12 +75,12 @@ namespace RouteSystemMVC.Controllers
             return View(route);
         }
         
-        public  IActionResult WriterFileDocx()
-        {
-            var pathFile = ReaderFile.ReadFile(@"C:\Users\matheus\Downloads\Rotas.xlsx");
-            WriterFiles.WriterFile(pathFile);
-            return RedirectToAction("Index");
-        }
+        //public  IActionResult WriterFileDocx()
+        //{
+        //    var pathFile = ReaderFile.ReadFile(@"C:\Users\matheus\Downloads\Rotas.xlsx");
+        //    WriterFiles.WriterFile(pathFile);
+        //    return RedirectToAction("Index");
+        //}
 
         // GET: Routes/Edit/5
         public async Task<IActionResult> Edit(string id)

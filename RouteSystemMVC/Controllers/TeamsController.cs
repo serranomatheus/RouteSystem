@@ -41,9 +41,18 @@ namespace RouteSystemMVC.Controllers
                     httpClient.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
 
+                    var peopleNoTeam = Request.Form["person"].ToList();
                     var formCity = Request.Form["city"].FirstOrDefault();
+
                     teamIn.City = formCity;
 
+                    if(peopleNoTeam.Count ==0)
+                    {
+                        teamIn.Error.Add("Nao é possivel cadastrar um time sem membros");
+                        TempData["errorList"] = teamIn.Error;
+                        return View(teamIn);
+
+                    }
                     var resposta = await httpClient.PostAsJsonAsync("Teams", teamIn);
 
                     if (resposta.StatusCode == System.Net.HttpStatusCode.BadRequest)
@@ -52,7 +61,7 @@ namespace RouteSystemMVC.Controllers
                         TempData["errorList"] = teamIn.Error;
                         return View(teamIn);
                     }
-                    var peopleNoTeam = Request.Form["person"].ToList();
+
                     foreach (var person in peopleNoTeam)
                     {
                         var personTeam = await ServicesApi.GetPerson(person);
@@ -108,8 +117,19 @@ namespace RouteSystemMVC.Controllers
             }
             HttpClient apiConnection = new HttpClient();
 
-            apiConnection.PutAsJsonAsync($"https://localhost:44390/api/Teams/{id}", team).Wait();
             var peopleNoTeam = Request.Form["peopleNoTeam"].ToList();
+            var peopleTeam = Request.Form["peopleTeam"].ToList();
+            var formCity = Request.Form["city"].FirstOrDefault();
+            var teamMembers =await  ServicesApi.GetTeamMembers(team.Name);
+            team.City = formCity;
+            if(peopleNoTeam.Count ==0 && peopleTeam.Count == teamMembers.Count)
+            {
+                team.Error.Add("Nao é possivel deixar um time sem membros");
+                TempData["errorList"] = team.Error;
+                return View(team);
+            }
+            apiConnection.PutAsJsonAsync($"https://localhost:44390/api/Teams/{id}", team).Wait();
+            
             foreach (var person in peopleNoTeam)
             {
                 var personTeam = await ServicesApi.GetPerson(person);
@@ -117,7 +137,7 @@ namespace RouteSystemMVC.Controllers
                     ServicesApi.UpdatePerson(person, new Person() { Id = personTeam.Id, Name = personTeam.Name, Team = team });
 
             }
-            var peopleTeam = Request.Form["peopleTeam"].ToList();
+            
             foreach (var person in peopleTeam)
             {
                 var personTeam = await ServicesApi.GetPerson(person);
@@ -125,8 +145,6 @@ namespace RouteSystemMVC.Controllers
                     ServicesApi.UpdatePerson(person, new Person() { Id = personTeam.Id, Name = personTeam.Name, Team = null });
 
             }
-            var formCity = Request.Form["city"].FirstOrDefault();
-            team.City = formCity;
 
             return RedirectToAction(nameof(Index));
         }
