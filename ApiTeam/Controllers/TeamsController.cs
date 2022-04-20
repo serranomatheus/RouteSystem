@@ -38,7 +38,10 @@ namespace ApiTeam.Controllers
 
             return team;
         }
-
+        [HttpGet("CityTeams")]
+        public ActionResult<List<Team>> GetCityTeams(string city) =>
+            _teamService.GetCityTeams(city);
+        
 
 
 

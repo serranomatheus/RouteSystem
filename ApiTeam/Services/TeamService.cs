@@ -21,6 +21,9 @@ namespace ApiTeam.Services
         public List<Team> Get() =>
             _team.Find(team => true).ToList();
 
+        public List<Team> GetCityTeams(string city) =>
+            _team.Find(team => team.City == city).ToList();
+
         public Team Get(string id) =>
             _team.Find<Team>(team => team.Id == id).FirstOrDefault();
 

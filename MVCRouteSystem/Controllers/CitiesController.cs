@@ -4,13 +4,15 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCRouteSystem.Models;
 using Newtonsoft.Json;
 
 namespace MVCRouteSystem.Controllers
 {
-	public class CitiesController : Controller
+    [Authorize]
+    public class CitiesController : Controller
 	{
         public async Task<IActionResult> Index()
         {

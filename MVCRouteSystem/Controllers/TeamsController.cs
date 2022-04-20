@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MVCRouteSystem.Models;
 using MVCRouteSystem.Services;
@@ -12,10 +14,17 @@ using Newtonsoft.Json;
 
 namespace MVCRouteSystem.Controllers
 {
-	public class TeamsController : Controller
+    [Authorize]
+    public class TeamsController : Controller
 	{
+        IWebHostEnvironment _appEnvironment;
+        public TeamsController(IWebHostEnvironment env)
+        {
+            _appEnvironment = env;
+        }
         public async Task<IActionResult> Index()
         {
+            
             HttpClient apiConnection = new HttpClient();
 
             HttpResponseMessage teams = await apiConnection.GetAsync("https://localhost:44390/api/Teams");

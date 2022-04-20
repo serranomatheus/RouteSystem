@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPerson", "ApiPerson\ApiP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTeam", "ApiTeam\ApiTeam.csproj", "{012814B5-F923-48D5-B90C-2D9ACEF3DE53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RouteSystemMVC", "RouteSystemMVC\RouteSystemMVC.csproj", "{D2E42827-0127-4F6E-A68F-7FEA5CBF0C47}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCRouteSystem", "MVCRouteSystem\MVCRouteSystem.csproj", "{F386F3B8-3699-4592-A3C2-B8152A1BA594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVCRouteSystem", "MVCRouteSystem\MVCRouteSystem.csproj", "{F386F3B8-3699-4592-A3C2-B8152A1BA594}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{012814B5-F923-48D5-B90C-2D9ACEF3DE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{012814B5-F923-48D5-B90C-2D9ACEF3DE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{012814B5-F923-48D5-B90C-2D9ACEF3DE53}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2E42827-0127-4F6E-A68F-7FEA5CBF0C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2E42827-0127-4F6E-A68F-7FEA5CBF0C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2E42827-0127-4F6E-A68F-7FEA5CBF0C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2E42827-0127-4F6E-A68F-7FEA5CBF0C47}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F386F3B8-3699-4592-A3C2-B8152A1BA594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F386F3B8-3699-4592-A3C2-B8152A1BA594}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F386F3B8-3699-4592-A3C2-B8152A1BA594}.Release|Any CPU.ActiveCfg = Release|Any CPU

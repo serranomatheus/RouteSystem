@@ -5,9 +5,9 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
-<h4>Team</h4>
+<h4>Time</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,9 +19,10 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group">
 				</><label asp-for="City" class="control-label"></label><br />
-				<select asp-for="City" id="City">
+				<select class="form-select" asp-for="City" id="City">
                         @{
                             foreach (var city in await ServicesApi.GetCities()) 
                             {
@@ -29,35 +30,38 @@
 						}
 					}
 				</select>
+                <hr />
             <div class="form-group">
-                <p>Remover membros do time</p>
+                <p>Remover membros</p>
                 @foreach(Person person in await ServicesApi.GetTeamMembers(Model.Name))
                 {
-                    <div class="checkbox">
+                    <div class="form-check">
                         <input type="checkbox" id="peopleTeam" name="peopleTeam" value="@person.Id">
                         <label> @person.Name</label><br>
                         </div>
                 }
-                <p> Adicionar membros ao time</p>
+                <hr />
+                <p> Adicionar membros</p>
                 @foreach(Person person in await ServicesApi.GetPeopleNoTeam())
                 {
-                    <div class="checkbox">
+                    <div class="form-check">
                         <input type="checkbox" id="peopleNoTeam" name="peopleNoTeam" value="@person.Id">
                         <label> @person.Name</label><br>
                         </div>
                 }
             </div>
+            <hr />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-outline-dark" />
+                
             </div>
         </form>
     </div>
 </div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <hr />
+    <a class="btn btn-outline-warning" asp-action="Index">Voltar</a>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

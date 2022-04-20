@@ -43,6 +43,28 @@ namespace MVCRouteSystem.Services
                 return null;
             return team;
         }
+        public static async Task<List<Team>> GetTeams()
+		{
+            HttpClient apiConnection = new HttpClient();
+
+            HttpResponseMessage teams = await apiConnection.GetAsync("https://localhost:44390/api/Teams");
+            string responseBody = await teams.Content.ReadAsStringAsync();
+            List<Team> teamsList = JsonConvert.DeserializeObject<List<Team>>(responseBody);
+
+
+            return teamsList;
+        }
+        public static async Task<List<Team>> GetCityTeams(string city)
+        {
+            HttpClient apiConnection = new HttpClient();
+
+            HttpResponseMessage teams = await apiConnection.GetAsync("https://localhost:44390/api/Teams/CityTeams?city="+city);
+            string responseBody = await teams.Content.ReadAsStringAsync();
+            List<Team> teamsList = JsonConvert.DeserializeObject<List<Team>>(responseBody);
+            if (teamsList == null)
+                return null;
+            return teamsList;
+        }
         public static void UpdatePerson(string id, Person person)
         {
             HttpClient apiConnection = new HttpClient();

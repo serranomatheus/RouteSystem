@@ -1,8 +1,30 @@
-﻿@{
+﻿@using MVCRouteSystem.Services
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+	<h1 class="display-4 text-center"> UpLoad File</h1>
+	<form method="post" enctype="multipart/form-data" asp-controller="Routes" asp-action="Index">
+		<div>
+			<label class="control-label"></label>
+			<input class="form-control" type="file" name="pathFile" />
+			<span class="text-danger"></span>
+		</div>		
+		<div class="form-group">
+			<hr />
+		<h5>Selecione a cidade</h5>
+		<select class="form-select" name="routeCity" id="routeCity" oninput="" onchange="cityRoute()">
+			<option value="selectCity">...</option>
+			@foreach (City city in await ServicesApi.GetCities())
+			{
+				<option value="@city.Name">@city.Name</option>
+			}
+		</select>
+		</div><hr />
+		<div>
+			<input type="submit" value="Enviar" class="btn btn-outline-dark" />
+		</div>
+	</form>
 </div>
+

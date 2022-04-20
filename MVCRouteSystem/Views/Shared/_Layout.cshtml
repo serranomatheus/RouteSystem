@@ -5,6 +5,8 @@
 	{
 		errorList = (List<string>)TempData["errorList"];
 	}
+
+	
 }
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
@@ -15,8 +17,10 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - MVCRouteSystem</title>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" />
+
 </head>
 <body>
 	<header>
@@ -32,11 +36,8 @@
 						@if (SignInManager.IsSignedIn(User))
 						{
 							<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Routes" asp-action="Index">Rotas</a>
-						</li>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Rotas</a>
+						</li>						
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="Cities" asp-action="Index">Cidades</a>
 						</li>
@@ -65,7 +66,7 @@
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+							<h5 class="modal-title" id="exampleModalLabel">Mensagem</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
@@ -77,7 +78,7 @@
 							}
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
 						</div>
 					</div>
 				</div>

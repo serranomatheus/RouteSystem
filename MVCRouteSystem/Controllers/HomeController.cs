@@ -19,7 +19,12 @@ namespace MVCRouteSystem.Controllers
         {
             _logger = logger;
         }
+        public IActionResult UploadFile()
+        {
+            var teste = Request.Form["bt1"];
+            return View();
 
+        }
         public IActionResult Index()
         {
             return View();
@@ -35,5 +40,14 @@ namespace MVCRouteSystem.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Index(IFormFile file)
+        //{
+
+        //    var routes = await ReaderFile.ReadFile(file);
+        //    ViewBag.routes = routes;
+        //    return RedirectToAction("Routes",routes);
+
+        //}
     }
 }
