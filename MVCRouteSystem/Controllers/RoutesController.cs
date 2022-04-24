@@ -53,7 +53,7 @@ namespace MVCRouteSystem.Controllers
             {
                 WriterFiles.WriterFileXlsx(routeService, _routeCity, routeTeams, selectColumn, _routeFile, _appEnvironment.WebRootPath,_columnService, _headerList);
 
-                return View(RedirectToAction(nameof(Index)));
+                return RedirectToRoute(new { controller = "Home", Action = "Index" });
             }
             return View();
         }

@@ -82,7 +82,7 @@ namespace MVCRouteSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, [Bind("Id,Name,IsAvailable")] City city)
+        public IActionResult Edit(string id, City city)
         {
             if (string.IsNullOrEmpty(id))
             {
