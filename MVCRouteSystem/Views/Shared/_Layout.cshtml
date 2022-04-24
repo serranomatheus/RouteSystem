@@ -1,10 +1,12 @@
 ﻿@{
 
-	var errorList = new List<string>();
+	var error = "";
 	if (TempData["errorList"] != null)
 	{
-		errorList = (List<string>)TempData["errorList"];
-	}	
+		error = TempData["errorList"].ToString();
+	}
+
+
 }
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
@@ -15,7 +17,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - MVCRouteSystem</title>
-	
+
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" />
 
@@ -24,33 +26,45 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVCRouteSystem</a>
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sistema de Rotas</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
+						@{
+							var user = await UserManager.FindByEmailAsync("admin@gmail.com");						
+							if(user == null)
+							{
+								<li class="nav-item">
+									<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Usuarios</a>
+								</li>
+							}						
+						else
+						{
 						@if (SignInManager.IsSignedIn(User))
 						{
 							<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Rotas</a>
-						</li>						
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Cities" asp-action="Index">Cidades</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="People" asp-action="Index">Pessoas</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index">Times</a>
-						</li>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Rotas</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Cities" asp-action="Index">Cidades</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="People" asp-action="Index">Pessoas</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index">Times</a>
+							</li>
 							@if (User.Identity.Name == "admin@gmail.com")
 							{
 								<li class="nav-item">
-									<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+									<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Usuarios</a>
 								</li>
 							}
+						}
+						}
 						}
 					</ul>
 					<partial name="_LoginPartial" />
@@ -58,7 +72,7 @@
 			</div>
 		</nav>
 	</header>
-<div class="container">
+	<div class="container">
 		<main role="main" class="pb-3">
 			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
@@ -70,10 +84,9 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							@foreach (var error in errorList)
-							{
-								<p>@error</p>
-							}
+
+							<p>@error</p>
+
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -96,10 +109,10 @@
 	@await RenderSectionAsync("Scripts", required: false)
 
 	<script type="text/javascript">
-		@if (errorList.Any())
+		@if (error != "")
 		{
 			<text>
-					$("#exampleModal").modal("show")
+							$("#exampleModal").modal("show")
 			</text>
 		}
 	</script>

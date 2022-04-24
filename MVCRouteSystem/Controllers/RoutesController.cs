@@ -18,6 +18,7 @@ namespace MVCRouteSystem.Controllers
     public class RoutesController : Controller
     {
         IWebHostEnvironment _appEnvironment;
+        private static string _pathFile;
         public RoutesController(IWebHostEnvironment env)
         {
             _appEnvironment = env;
@@ -28,13 +29,56 @@ namespace MVCRouteSystem.Controllers
         private static List<string> _servicesList;
         private static List<string> _headerList;
         private static string _routeCity;
-       
+        public static List<string> addressList = new List<string>{
+            "numero",
+            "cep",
+            "bairro",
+            "complemento"
+        };
+
         //GET: Routes
         [HttpPost]
         public async Task<IActionResult> Index(IFormFile pathFile)
         {
             _routeCity = Request.Form["routeCity"];
-            (_routeFile, _servicesList, _headerList,_columnService) = ReaderFiles.ReaderFileXlsx(pathFile, _routeCity);
+            string routeCity;
+
+            if (_routeCity == "selectCity")
+            {
+                string error = ("Favor selecionar uma cidade");
+                TempData["errorList"] = error;
+                return RedirectToRoute(new { controller = "Home", Action = "Index" });
+
+            }
+
+            if (pathFile == null)
+            {
+                string error = ("Favor importar o arquivo");
+                TempData["errorList"] = error;
+                return RedirectToRoute(new { controller = "Home", Action = "Index" });
+
+            }
+
+            (_routeFile, _servicesList, _headerList, _columnService, routeCity) = ReaderFiles.ReaderFileXlsx(pathFile, _routeCity);
+
+            if (routeCity == "error")
+            {
+
+                string error = ("Cidade selecionada nao possui Servicos no arquivo. Favor selecionar outra cidade");
+                TempData["errorList"] = error;
+                return RedirectToRoute(new { controller = "Home", Action = "Index" });
+            }
+
+            var cityTeams = await ServicesApi.GetCityTeams(_routeCity);
+
+            if (cityTeams == null)
+            {
+                string error = ("Cidade selecionada nao possui times. Favor cadastrar times antes de gerar rotas");
+                TempData["errorList"] = error;
+                return RedirectToRoute(new { controller = "Home", Action = "Index" });
+
+            }
+          
             ViewBag.servicesList = _servicesList;
             ViewBag.routeCity = _routeCity;
 
@@ -45,17 +89,28 @@ namespace MVCRouteSystem.Controllers
 
         public IActionResult Create()
         {
-            var routeService = Request.Form["routeService"];            
+            var routeService = Request.Form["routeService"];
             var routeTeams = Request.Form["routeTeams"].ToList();
             var selectColumn = Request.Form["selectColumn"].ToList();
-           
+
             if (ModelState.IsValid)
             {
-                WriterFiles.WriterFileXlsx(routeService, _routeCity, routeTeams, selectColumn, _routeFile, _appEnvironment.WebRootPath,_columnService, _headerList);
+                _pathFile = WriterFiles.WriterFileXlsx(routeService, _routeCity, routeTeams, selectColumn, _routeFile, _appEnvironment.WebRootPath, _columnService, _headerList);
 
-                return RedirectToRoute(new { controller = "Home", Action = "Index" });
+
+
+                return View();
             }
+
             return View();
+        }
+        
+        
+        public async Task<FileContentResult> DownloadFile()
+        {
+            var fileName = _pathFile.Split("//").ToList();
+            var file = System.IO.File.ReadAllBytes(_pathFile);
+            return  File(file, "application/octet-stream", fileName.Last().ToString());
         }
     }
 }

@@ -57,8 +57,8 @@ namespace MVCRouteSystem.Controllers
 
                     if (peopleNoTeam.Count == 0)
                     {
-                        teamIn.Error.Add("Nao é possivel cadastrar um time sem membros");
-                        TempData["errorList"] = teamIn.Error;
+                        string error = "Nao é possivel cadastrar um time sem membros";
+                        TempData["errorList"] = error;
                         return View(teamIn);
 
                     }
@@ -66,8 +66,8 @@ namespace MVCRouteSystem.Controllers
 
                     if (resposta.StatusCode == System.Net.HttpStatusCode.BadRequest)
                     {
-                        teamIn.Error.Add(resposta.Content.ReadAsStringAsync().Result);
-                        TempData["errorList"] = teamIn.Error;
+                        string error =  resposta.Content.ReadAsStringAsync().Result;
+                        TempData["errorList"] = error;
                         return View(teamIn);
                     }
 

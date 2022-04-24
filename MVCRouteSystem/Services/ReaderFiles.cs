@@ -7,12 +7,14 @@ namespace MVCRouteSystem.Services
 {
     public class ReaderFiles
     {
-        public static (List<List<string>>,List<string>,List<string>,int) ReaderFileXlsx(IFormFile pathFile, string routeCity)
+        public static (List<List<string>>, List<string>, List<string>, int,string) ReaderFileXlsx(IFormFile pathFile, string routeCity)
         {
+            
             List<string> servicesList = new List<string>();
             List<string> headerList = new List<string>();
             List<List<string>> routeFile = new List<List<string>>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            string routeCityError = "";
 
             using (ExcelPackage package = new(pathFile.OpenReadStream()))
             {
@@ -22,6 +24,7 @@ namespace MVCRouteSystem.Services
                 int columnCep = 0;
                 int columnService = 0;
                 int columnCity = 0;
+
                 for (int row = 1; row <= columnCount; row++)
                 {
                     if (worksheet.Cells[1, row].Value.ToString().ToLower().Replace(" ", "").Equals("cep"))
@@ -36,8 +39,9 @@ namespace MVCRouteSystem.Services
 
                     if (worksheet.Cells[1, row].Value.ToString().ToLower().Replace("ç", "c").Equals("servico"))
                     {
-                       columnService = row - 1;
-                    }
+                        columnService = row - 1;
+                    }                  
+
                 }
 
                 worksheet.Cells[2, 1, rowCount, columnCount].Sort(columnCep, false);
@@ -57,21 +61,29 @@ namespace MVCRouteSystem.Services
 
                 for (int i = 0; i < routeFile.Count; i++)
                 {
-                    
-                    routeFile.Remove(routeFile.Find(route => route[columnCity].ToLower() != routeCity.ToLower()));
-                   
+                    var city = routeFile.FindIndex(route => route[columnCity].ToLower() == routeCity.ToLower());
+                    if (city == (-1))
+                    {
+                       routeCityError = ("error");
+                    }
                 }
 
-                for (int i  = 0; i < routeFile.Count; i++ )
+                for (int i = 0; i < routeFile.Count; i++)
+                {
+
+                    routeFile.Remove(routeFile.Find(route => route[columnCity].ToLower() != routeCity.ToLower()));
+
+                }
+
+                for (int i = 0; i < routeFile.Count; i++)
                 {
                     servicesList.Add(routeFile[i][columnService].ToString());
-                    
+
                 }
 
-               servicesList = servicesList.Distinct().ToList();
-
-
-                return (routeFile,servicesList,headerList, columnService);
+                servicesList = servicesList.Distinct().ToList();               
+              
+                return (routeFile, servicesList, headerList, columnService, routeCityError);
             }
         }
     }

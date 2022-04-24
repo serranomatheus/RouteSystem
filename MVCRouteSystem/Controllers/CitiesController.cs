@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCRouteSystem.Models;
+using MVCRouteSystem.Services;
 using Newtonsoft.Json;
 
 namespace MVCRouteSystem.Controllers
@@ -56,7 +57,7 @@ namespace MVCRouteSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
             HttpClient apiConnection = new HttpClient();
-
+            
             HttpResponseMessage cities = await apiConnection.GetAsync("https://localhost:44378/api/Cities/" + id);
             string responseBody = await cities.Content.ReadAsStringAsync();
             var city = JsonConvert.DeserializeObject<City>(responseBody);
@@ -97,7 +98,7 @@ namespace MVCRouteSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -105,8 +106,17 @@ namespace MVCRouteSystem.Controllers
             }
             HttpClient apiConnection = new HttpClient();
 
+            var cityTeam = await ServicesApi.GetCity(id);
+            var teamsCity = await ServicesApi.GetCityTeams(cityTeam.Name);
+
             apiConnection.DeleteAsync("https://localhost:44378/api/Cities/" + id).Wait();
 
+            foreach(var team in teamsCity)
+            {
+                var teamCity = await ServicesApi.GetTeam(team.Id);
+                if (teamCity != null)
+                    ServicesApi.UpdateTeam(team.Id, new Team() { Id = teamCity.Id, Name = teamCity.Name, City = null });
+            }
 
             return RedirectToAction(nameof(Index));
 

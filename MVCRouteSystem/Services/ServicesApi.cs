@@ -61,7 +61,7 @@ namespace MVCRouteSystem.Services
             HttpResponseMessage teams = await apiConnection.GetAsync("https://localhost:44390/api/Teams/CityTeams?city="+city);
             string responseBody = await teams.Content.ReadAsStringAsync();
             List<Team> teamsList = JsonConvert.DeserializeObject<List<Team>>(responseBody);
-            if (teamsList == null)
+            if (teamsList.Count == 0)
                 return null;
             return teamsList;
         }
@@ -94,6 +94,22 @@ namespace MVCRouteSystem.Services
             if (citiesList == null)
                 return null;
             return citiesList;
+        }
+
+        public static async void UpdateTeam(string id, Team team)
+        {
+            HttpClient apiConnection = new HttpClient();
+            apiConnection.PutAsJsonAsync($"https://localhost:44390/api/Teams/{id}", team).Wait();
+        }
+
+        public static async Task<City> GetCity(string id)
+        {
+            HttpClient apiConnection = new HttpClient();
+
+            HttpResponseMessage cities = await apiConnection.GetAsync("https://localhost:44378/api/Cities/" + id);
+            string responseBody = await cities.Content.ReadAsStringAsync();
+            var city = JsonConvert.DeserializeObject<City>(responseBody);
+            return city;
         }
     }
 }
