@@ -17,7 +17,9 @@ namespace MVCRouteSystem.Services
             List<int> selectColumnInt = new List<int>();
             int columnAdress;
 
-            for (int i = 0; i < routeFile.Count; i++)
+            var countRouteFile = routeFile.Count;
+
+            for (int i = 0; i < countRouteFile; i++)
             {
                 routeFile.Remove(routeFile.Find(route => route[columnService].ToLower().Replace("ç", "c").Replace("ã", "a")
                                                 != routeService.ToLower().Replace("ç", "c").Replace("ã", "a")));

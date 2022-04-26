@@ -68,7 +68,9 @@ namespace MVCRouteSystem.Services
                     }
                 }
 
-                for (int i = 0; i < routeFile.Count; i++)
+                var countRouteFile = routeFile.Count;
+
+                for (int i = 0; i < countRouteFile; i++)
                 {
 
                     routeFile.Remove(routeFile.Find(route => route[columnCity].ToLower() != routeCity.ToLower()));
